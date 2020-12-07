@@ -1,22 +1,26 @@
 <template>
- <ChapterNode></ChapterNode>
+  <div class="spa">
+    <MenuBar></MenuBar>
+    <Chapters></Chapters>
+  </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import ChapterNode from '@/components/ChapterNode.vue'
+import Chapters from "@/components/Chapters.vue";
+import MenuBar from "@/components/MenuBar.vue";
 
 @Options({
-  components: {ChapterNode},
+  components: { Chapters, MenuBar },
 })
 export default class App extends Vue {}
 </script>
 
 <style lang="scss">
-@import './src/styles/main.scss';
+@import "./src/styles/main.scss";
 
 * {
-  margin: 0;
+  margin: 0;  
   padding: 0;
   box-sizing: border-box;
 }
@@ -45,6 +49,24 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.spa {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+  width: 100%;
+}
+
+.chapters {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+  width: 100%;
 }
 
 
