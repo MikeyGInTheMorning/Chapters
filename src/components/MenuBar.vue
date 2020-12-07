@@ -2,16 +2,16 @@
   <div class="menu-bar">
     <div class="menu-bar__menu-items">
       <div class="menu-bar__menu-item menu-color-1">
-        Logo
+        <font-awesome-icon icon="book-open" />
       </div>
       <div class="menu-bar__menu-item menu-color-2">
-       <font-awesome-icon icon="user-secret" />
+       <font-awesome-icon icon="calendar" />
       </div>
       <div class="menu-bar__menu-item menu-color-3">
-        2
+        <font-awesome-icon icon="file-alt" />
       </div>
       <div class="menu-bar__menu-item menu-color-4">
-        3
+        <font-awesome-icon icon="paper-plane" />
       </div>
     </div>
   </div>
@@ -54,23 +54,26 @@ export default class HelloWorld extends Vue {
 
   &__menu-item {
     background-color: white;
-    width: 5rem;
-    height: 5rem;
+    width: $circle-radius-medium;
+    height: $circle-radius-medium;
 
     display: flex;
     justify-content: center;
     align-items: center;
 
     border-radius: 50%;
-    box-shadow: 0px 3px $shadow;
+    box-shadow: $box-shadow;
 
     padding: 0.5rem;
 
-    &:first-child {
-      width: 8rem;
-      height: 8rem;
+    font-size: $font-size-large;
+    cursor: pointer;
 
-      font-size: 1.5rem;
+    &:first-child {
+      width: $circle-radius-large;
+      height: $circle-radius-large;
+
+      font-size: $font-size-xxlarge;
     }
     
     &:active{
@@ -82,25 +85,25 @@ export default class HelloWorld extends Vue {
 .menu-color-1 {
   background-color: $menu-item-1;
   &:hover {
-    background-color: darken($menu-item-1, 5%);
+    background-color: darken($menu-item-1, 7%);
   }
 }
 .menu-color-2 {
   background-color: $menu-item-2;
   &:hover {
-    background-color: darken($menu-item-2, 5%);
+    background-color: darken($menu-item-2, 7%);
   }
 }
 .menu-color-3 {
   background-color: $menu-item-3;
   &:hover {
-    background-color: darken($menu-item-3, 5%);
+    background-color: darken($menu-item-3, 7%);
   }
 }
 .menu-color-4 {
   background-color: $menu-item-4;
   &:hover {
-    background-color: darken($menu-item-4, 5%);
+    background-color: darken($menu-item-4, 7%);
   }
 }
 </style>

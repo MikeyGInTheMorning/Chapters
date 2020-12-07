@@ -1,23 +1,25 @@
 <template>
   <div class="chapters">
-    <div class="search-bar">
-      <input
-        type="text"
-        class="search-bar__search"
-        placeholder="Quick Search"
-        v-model="search"
-      />
-    </div>
-    <div class="chapter-nodes">
-      <div v-for="chapter in chapters" :key="chapter.id">
-        <ChapterNode
-          :Title="chapter.Title"
-          :Description="chapter.Description"
-        ></ChapterNode>
+    <div class="chapters-content">
+      <div class="search-bar">
+        <input
+          type="text"
+          class="search-bar__search"
+          placeholder="Quick Search"
+          v-model="search"
+        />
+      </div>
+      <div class="chapter-nodes">
+        <div v-for="chapter in chapterz" :key="chapter.id">
+          <ChapterNode
+            :Title="chapter.Title"
+            :Description="chapter.Description"
+          ></ChapterNode>
+        </div>
       </div>
     </div>
     <div class="action">
-      +
+      <font-awesome-icon icon="plus" />
     </div>
   </div>
 </template>
@@ -95,6 +97,15 @@ import ChapterNode from "@/components/ChapterNode.vue";
       ],
     };
   },
+  computed: {
+    chapterz: function() {
+      const arr = this.chapters;
+      for (let index = 0; index < 15; index++) {
+        arr.push(this.chapters);
+      }
+      return arr;
+    },
+  },
 })
 export default class Chapters extends Vue {}
 </script>
@@ -103,6 +114,11 @@ export default class Chapters extends Vue {}
 @import "./src/styles/main.scss";
 
 .chapters {
+  width: 100%;
+  height: 100%;
+}
+
+.chapters-content {
   width: 100%;
   height: 100%;
 
@@ -145,15 +161,34 @@ export default class Chapters extends Vue {}
   padding: 5rem;
 }
 
+$action-distance: 7rem;
 .action {
-  position: abolute;
-  bottom: 25rem;
-  left: 25rem;
-  height: 15rem;
-  width: 15rem;
-  font-size: 5rem;
+  position: absolute;
+  bottom: $action-distance;
+  right: $action-distance;
+
+  height: $circle-radius-large;
+  width: $circle-radius-large;
+  
+  font-size: $font-size-xxlarge;
+  color: $white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   border-radius: 50%;
   background-color: $menu-item-1;
+  box-shadow: $box-shadow;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken($menu-item-1, 7%);
+  }
+
+  &:active {
+    box-shadow: 0px 0px $white;
+  }
 }
 </style>
