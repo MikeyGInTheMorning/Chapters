@@ -9,20 +9,14 @@
           v-model="search"
         />
       </div>
-      <div class="chapter-nodes">
+      <div class="chapter-nodes" @click="chapterClicked(null)">
         <div v-for="chapter in chapterz" :key="chapter.id">
           <ChapterNode
             @click="chapterClicked(chapter)"
-            :Title="chapter.Title"
-            :Description="chapter.Description"
-            :isSelected="chapter == selectedChapter"
+            :Chapter="chapter"
+            :isSelected="chapter === selectedChapter"
           ></ChapterNode>
         </div>
-      </div>
-      <div class="selectedChapter" v-if="selectedChapterDoubleClick">
-        <span>{{ selectedChapterDoubleClick.id }}</span>
-        <span>{{ selectedChapterDoubleClick.Title }}</span>
-        <span>{{ selectedChapterDoubleClick.Description }}</span>
       </div>
     </div>
     <div class="action" @click="addChapter()">
@@ -73,36 +67,6 @@ import ChapterNode from "@/components/ChapterNode.vue";
           id: 3,
           Title: "Spirituality",
           Description: ""
-        },
-        {
-          id: 1,
-          Title: "Physical Health",
-          Description: "Everyting to do for physical health"
-        },
-        {
-          id: 2,
-          Title: "Personal Projects",
-          Description: ""
-        },
-        {
-          id: 3,
-          Title: "Spirituality",
-          Description: ""
-        },
-        {
-          id: 1,
-          Title: "Physical Health",
-          Description: "Everyting to do for physical health"
-        },
-        {
-          id: 2,
-          Title: "Personal Projects",
-          Description: ""
-        },
-        {
-          id: 3,
-          Title: "Spirituality",
-          Description: ""
         }
       ],
       clickCounter: 0,
@@ -118,25 +82,30 @@ import ChapterNode from "@/components/ChapterNode.vue";
       });
     },
     chapterClicked: function(event: any) {
-      this.clickCounter++;
+      this.clickCounter++
       if (this.clickCounter == 1) {
-        this.selectedChapter = event;
+        this.selectedChapter = event
+        this.selectedChapterDoubleClick = null
         this.timer = setTimeout(() => {
           this.clickCounter = 0;
         }, 250);
       } else {
         clearTimeout(this.timer);
-        this.selectedChapterDoubleClick = event;
-        this.$emit("chapterSelected", event);
-        this.clickCounter = 0;
+        this.selectedChapterDoubleClick = event
+        this.$emit("chapterSelected", event)
+        this.clickCounter = 0
       }
     }
   },
   computed: {
     chapterz: function() {
-      const arr = this.chapters;
-      for (let index = 0; index < 15; index++) {
-        arr.push(this.chapters[index]);
+      const arr = this.chapters
+      let id = this.chapters.length
+      for (let index = 0; index < 25; index++) {
+        const curr = { ...this.chapters[index]}
+        id++
+        curr.id = id
+        arr.push(curr)
       }
       return arr;
     }

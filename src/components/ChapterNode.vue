@@ -1,10 +1,10 @@
 <template>
   <div class="chapter-node" :class="{ selected: isSelected }">
     <div class="chapter-node__title">
-      {{ Title }}
+      {{ Chapter.Title }}
     </div>
     <div class="chapter-node__content">
-      {{ Description }}
+      {{ Chapter.Description }}
     </div>
   </div>
 </template>
@@ -14,8 +14,7 @@ import { Options, Vue } from "vue-class-component";
 
 @Options({
   props: {
-    Title: String,
-    Description: String,
+    Chapter: Object,
     isSelected: Boolean
   }
 })
@@ -30,9 +29,9 @@ export default class HelloWorld extends Vue {}
   width: 100%;
   height: 100%;
 
+  border: .25rem solid transparent;
   border-radius: 50%;
   padding: 4rem;
-  box-shadow: 15% red;
 
   display: flex;
   justify-content: start;
@@ -53,6 +52,7 @@ export default class HelloWorld extends Vue {}
 }
 
 .selected {
-  background: red;
+  border: .25rem solid $node-main-border;
+  border-radius: 50%;
 }
 </style>

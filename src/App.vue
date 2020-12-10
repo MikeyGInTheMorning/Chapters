@@ -3,7 +3,7 @@
     <MenuBar></MenuBar>
     <Chapters
       v-if="!chapterSelected"
-      @chapterSelected="chapterSelected()"
+      @chapterSelected="onChapterSelected()"
     ></Chapters>
   </div>
 </template>
@@ -21,7 +21,7 @@ import MenuBar from "@/components/MenuBar.vue";
     };
   },
   methods: {
-    chapterSelected: function(event: any) {
+    onChapterSelected: function(event: any) {
       this.chapterSelected = event;
     }
   }
