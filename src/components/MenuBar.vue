@@ -5,7 +5,7 @@
         <font-awesome-icon icon="book-open" />
       </div>
       <div class="menu-bar__menu-item menu-color-2">
-       <font-awesome-icon icon="calendar" />
+        <font-awesome-icon icon="calendar" />
       </div>
       <div class="menu-bar__menu-item menu-color-3">
         <font-awesome-icon icon="file-alt" />
@@ -22,8 +22,8 @@ import { Options, Vue } from "vue-class-component";
 
 @Options({
   props: {
-    msg: String,
-  },
+    msg: String
+  }
 })
 export default class HelloWorld extends Vue {
   msg!: string;
@@ -46,7 +46,6 @@ export default class HelloWorld extends Vue {
     align-items: center;
     flex-direction: column;
 
-    
     color: $white;
     font-size: 1.2rem;
     font-weight: bolder;
@@ -75,8 +74,8 @@ export default class HelloWorld extends Vue {
 
       font-size: $font-size-xxlarge;
     }
-    
-    &:active{
+
+    &:active {
       box-shadow: 0px 0px $white;
     }
   }

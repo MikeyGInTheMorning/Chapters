@@ -1,10 +1,10 @@
 <template>
- <div class="chapter-node" :class="{ selected: isSelected}">
+  <div class="chapter-node" :class="{ selected: isSelected }">
     <div class="chapter-node__title">
-      {{Title}}
+      {{ Title }}
     </div>
     <div class="chapter-node__content">
-      {{Description}}
+      {{ Description }}
     </div>
   </div>
 </template>
@@ -23,7 +23,7 @@ export default class HelloWorld extends Vue {}
 </script>
 
 <style scoped lang="scss">
-@import './src/styles/main.scss';
+@import "./src/styles/main.scss";
 
 .chapter-node {
   background-color: $node-main;
@@ -47,14 +47,12 @@ export default class HelloWorld extends Vue {}
     font-size: 1.2rem;
   }
 
-  
-
-  &:hover{
+  &:hover {
     background: green;
   }
 }
 
-.selected{
-    background: red;
-  }
+.selected {
+  background: red;
+}
 </style>

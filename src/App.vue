@@ -1,7 +1,10 @@
 <template>
   <div class="spa">
     <MenuBar></MenuBar>
-    <Chapters></Chapters>
+    <Chapters
+      v-if="!chapterSelected"
+      @chapterSelected="chapterSelected()"
+    ></Chapters>
   </div>
 </template>
 
@@ -12,6 +15,16 @@ import MenuBar from "@/components/MenuBar.vue";
 
 @Options({
   components: { Chapters, MenuBar },
+  data: function() {
+    return {
+      chapterSelected: null
+    };
+  },
+  methods: {
+    chapterSelected: function(event: any) {
+      this.chapterSelected = event;
+    }
+  }
 })
 export default class App extends Vue {}
 </script>
@@ -20,7 +33,7 @@ export default class App extends Vue {}
 @import "./src/styles/main.scss";
 
 * {
-  margin: 0;  
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
@@ -68,6 +81,4 @@ html {
   height: 100%;
   width: 100%;
 }
-
-
 </style>

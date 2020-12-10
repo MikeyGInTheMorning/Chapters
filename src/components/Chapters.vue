@@ -37,7 +37,7 @@ import ChapterNode from "@/components/ChapterNode.vue";
 
 @Options({
   components: { ChapterNode },
-  emits: ['chapterSelected'],
+  emits: ["chapterSelected"],
   data: function() {
     return {
       search: "",
@@ -47,66 +47,66 @@ import ChapterNode from "@/components/ChapterNode.vue";
         {
           id: 1,
           Title: "Physical Health",
-          Description: "Everyting to do for physical health",
+          Description: "Everyting to do for physical health"
         },
         {
           id: 2,
           Title: "Personal Projects",
-          Description: "",
+          Description: ""
         },
         {
           id: 3,
           Title: "Spirituality",
-          Description: "",
+          Description: ""
         },
         {
           id: 1,
           Title: "Physical Health",
-          Description: "Everyting to do for physical health",
+          Description: "Everyting to do for physical health"
         },
         {
           id: 2,
           Title: "Personal Projects",
-          Description: "",
+          Description: ""
         },
         {
           id: 3,
           Title: "Spirituality",
-          Description: "",
+          Description: ""
         },
         {
           id: 1,
           Title: "Physical Health",
-          Description: "Everyting to do for physical health",
+          Description: "Everyting to do for physical health"
         },
         {
           id: 2,
           Title: "Personal Projects",
-          Description: "",
+          Description: ""
         },
         {
           id: 3,
           Title: "Spirituality",
-          Description: "",
+          Description: ""
         },
         {
           id: 1,
           Title: "Physical Health",
-          Description: "Everyting to do for physical health",
+          Description: "Everyting to do for physical health"
         },
         {
           id: 2,
           Title: "Personal Projects",
-          Description: "",
+          Description: ""
         },
         {
           id: 3,
           Title: "Spirituality",
-          Description: "",
-        },
+          Description: ""
+        }
       ],
       clickCounter: 0,
-      timer: null,
+      timer: null
     };
   },
   methods: {
@@ -114,23 +114,23 @@ import ChapterNode from "@/components/ChapterNode.vue";
       this.chapters.push({
         id: this.chapters.length + 1,
         Title: "Test",
-        Description: "Hello World",
+        Description: "Hello World"
       });
     },
     chapterClicked: function(event: any) {
       this.clickCounter++;
       if (this.clickCounter == 1) {
-        this.selectedChapter = event
-        this.timer = setTimeout(()=> {
+        this.selectedChapter = event;
+        this.timer = setTimeout(() => {
           this.clickCounter = 0;
         }, 250);
       } else {
-        clearTimeout(this.timer)
-        this.selectedChapterDoubleClick = event
-        this.$emit('chapterSelected', event)
-        this.clickCounter = 0
+        clearTimeout(this.timer);
+        this.selectedChapterDoubleClick = event;
+        this.$emit("chapterSelected", event);
+        this.clickCounter = 0;
       }
-    },
+    }
   },
   computed: {
     chapterz: function() {
@@ -139,8 +139,8 @@ import ChapterNode from "@/components/ChapterNode.vue";
         arr.push(this.chapters[index]);
       }
       return arr;
-    },
-  },
+    }
+  }
 })
 export default class Chapters extends Vue {}
 </script>
