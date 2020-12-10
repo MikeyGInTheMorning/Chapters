@@ -12,13 +12,20 @@
       <div class="chapter-nodes">
         <div v-for="chapter in chapterz" :key="chapter.id">
           <ChapterNode
+            @click="chapterClicked(chapter)"
             :Title="chapter.Title"
             :Description="chapter.Description"
+            :isSelected="chapter == selectedChapter"
           ></ChapterNode>
         </div>
       </div>
+      <div class="selectedChapter" v-if="selectedChapterDoubleClick">
+        <span>{{ selectedChapterDoubleClick.id }}</span>
+        <span>{{ selectedChapterDoubleClick.Title }}</span>
+        <span>{{ selectedChapterDoubleClick.Description }}</span>
+      </div>
     </div>
-    <div class="action">
+    <div class="action" @click="addChapter()">
       <font-awesome-icon icon="plus" />
     </div>
   </div>
@@ -30,9 +37,12 @@ import ChapterNode from "@/components/ChapterNode.vue";
 
 @Options({
   components: { ChapterNode },
+  emits: ['chapterSelected'],
   data: function() {
     return {
       search: "",
+      selectedChapter: null,
+      selectedChapterDoubleClick: null,
       chapters: [
         {
           id: 1,
@@ -95,13 +105,38 @@ import ChapterNode from "@/components/ChapterNode.vue";
           Description: "",
         },
       ],
+      clickCounter: 0,
+      timer: null,
     };
+  },
+  methods: {
+    addChapter: function() {
+      this.chapters.push({
+        id: this.chapters.length + 1,
+        Title: "Test",
+        Description: "Hello World",
+      });
+    },
+    chapterClicked: function(event: any) {
+      this.clickCounter++;
+      if (this.clickCounter == 1) {
+        this.selectedChapter = event
+        this.timer = setTimeout(()=> {
+          this.clickCounter = 0;
+        }, 250);
+      } else {
+        clearTimeout(this.timer)
+        this.selectedChapterDoubleClick = event
+        this.$emit('chapterSelected', event)
+        this.clickCounter = 0
+      }
+    },
   },
   computed: {
     chapterz: function() {
       const arr = this.chapters;
       for (let index = 0; index < 15; index++) {
-        arr.push(this.chapters);
+        arr.push(this.chapters[index]);
       }
       return arr;
     },
@@ -145,20 +180,22 @@ export default class Chapters extends Vue {}
   }
 }
 
+$grid-template-radius: 15rem;
 .chapter-nodes {
   width: 100%;
   height: 100%;
   padding: 1rem;
 
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax($grid-template-radius, 1fr));
+
+  grid-auto-rows: $grid-template-radius;
+  grid-gap: 2rem;
 
   overflow-y: auto;
 }
 
 .node {
-  padding: 5rem;
 }
 
 $action-distance: 7rem;
@@ -169,7 +206,7 @@ $action-distance: 7rem;
 
   height: $circle-radius-large;
   width: $circle-radius-large;
-  
+
   font-size: $font-size-xxlarge;
   color: $white;
 
@@ -190,5 +227,10 @@ $action-distance: 7rem;
   &:active {
     box-shadow: 0px 0px $white;
   }
+}
+
+.selectedChapter {
+  background: red;
+  color: white;
 }
 </style>
