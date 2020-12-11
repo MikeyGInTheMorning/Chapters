@@ -22,15 +22,17 @@
     <div class="action" @click="addChapter()">
       <font-awesome-icon icon="plus" />
     </div>
+  <ChapterEdit :Chapter="selectedChapter" @editClosed="chapterClicked(null)"></ChapterEdit>
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import ChapterNode from "@/components/ChapterNode.vue";
+import ChapterEdit from "@/components/ChapterEdit.vue";
 
 @Options({
-  components: { ChapterNode },
+  components: { ChapterNode, ChapterEdit },
   emits: ["chapterSelected"],
   data: function() {
     return {
@@ -92,6 +94,7 @@ import ChapterNode from "@/components/ChapterNode.vue";
       } else {
         clearTimeout(this.timer);
         this.selectedChapterDoubleClick = event
+        console.log('here')
         this.$emit("chapterSelected", event)
         this.clickCounter = 0
       }
@@ -99,7 +102,7 @@ import ChapterNode from "@/components/ChapterNode.vue";
   },
   computed: {
     chapterz: function() {
-      const arr = this.chapters
+      const arr = [...this.chapters]
       let id = this.chapters.length
       for (let index = 0; index < 25; index++) {
         const curr = { ...this.chapters[index]}
