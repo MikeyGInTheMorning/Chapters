@@ -28,6 +28,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import axios from "axios";
 import ChapterNode from "@/components/ChapterNode.vue";
 import ChapterEdit from "@/components/ChapterEdit.vue";
 
@@ -40,36 +41,36 @@ import ChapterEdit from "@/components/ChapterEdit.vue";
       selectedChapter: null,
       selectedChapterDoubleClick: null,
       chapters: [
-        {
-          id: 1,
-          Title: "Physical Health",
-          Description: "Everyting to do for physical health"
-        },
-        {
-          id: 2,
-          Title: "Personal Projects",
-          Description: ""
-        },
-        {
-          id: 3,
-          Title: "Spirituality",
-          Description: ""
-        },
-        {
-          id: 1,
-          Title: "Physical Health",
-          Description: "Everyting to do for physical health"
-        },
-        {
-          id: 2,
-          Title: "Personal Projects",
-          Description: ""
-        },
-        {
-          id: 3,
-          Title: "Spirituality",
-          Description: ""
-        }
+        // {
+        //   id: 1,
+        //   Title: "Physical Health",
+        //   Description: "Everyting to do for physical health"
+        // },
+        // {
+        //   id: 2,
+        //   Title: "Personal Projects",
+        //   Description: ""
+        // },
+        // {
+        //   id: 3,
+        //   Title: "Spirituality",
+        //   Description: ""
+        // },
+        // {
+        //   id: 1,
+        //   Title: "Physical Health",
+        //   Description: "Everyting to do for physical health"
+        // },
+        // {
+        //   id: 2,
+        //   Title: "Personal Projects",
+        //   Description: ""
+        // },
+        // {
+        //   id: 3,
+        //   Title: "Spirituality",
+        //   Description: ""
+        // }
       ],
       clickCounter: 0,
       timer: null
@@ -103,15 +104,20 @@ import ChapterEdit from "@/components/ChapterEdit.vue";
   computed: {
     chapterz: function() {
       const arr = [...this.chapters]
-      let id = this.chapters.length
-      for (let index = 0; index < 25; index++) {
-        const curr = { ...this.chapters[index]}
-        id++
-        curr.id = id
-        arr.push(curr)
-      }
+      // let id = this.chapters.length
+      // for (let index = 0; index < 25; index++) {
+      //   const curr = { ...this.chapters[index]}
+      //   id++
+      //   curr.id = id
+      //   arr.push(curr)
+      // }
       return arr;
     }
+  },
+  mounted () {
+    axios
+      .get('/')
+      .then((response:any) => (this.info = response))
   }
 })
 export default class Chapters extends Vue {}

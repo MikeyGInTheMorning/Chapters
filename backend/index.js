@@ -3,10 +3,6 @@ const app = express();
 const dotenv = require("dotenv");
 dotenv.config();
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
-
 const mongoose = require("mongoose");
 //connection to db
 mongoose.set("useFindAndModify", false);
@@ -29,6 +25,7 @@ app.post("/", async (req, res) => {
 
 // GET METHOD
 app.get("/", (req, res) => {
+  console.log('here')
   Chapter.find({}, (err, chaps) => {
     res.send({ chapters: chaps });
   });
