@@ -3,6 +3,8 @@ const app = express();
 const dotenv = require("dotenv");
 dotenv.config();
 
+app.use(express.urlencoded({ extended: true }));
+
 const mongoose = require("mongoose");
 //connection to db
 mongoose.set("useFindAndModify", false);

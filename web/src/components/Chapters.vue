@@ -114,10 +114,10 @@ import ChapterEdit from "@/components/ChapterEdit.vue";
       return arr;
     }
   },
-  mounted () {
+  mounted: function() {
     axios
       .get('/')
-      .then((response:any) => (this.info = response))
+      .then((response:any) => (console.log(response)))
   }
 })
 export default class Chapters extends Vue {}
