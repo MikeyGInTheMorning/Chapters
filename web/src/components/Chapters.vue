@@ -116,8 +116,10 @@ import ChapterEdit from "@/components/ChapterEdit.vue";
   },
   mounted: function() {
     axios
-      .get('/')
-      .then((response:any) => (console.log(response)))
+      .get('http://localhost:3000/chapters')
+      .then((response:any) => (
+          this.chapters =response.data.chapters
+        ))
   }
 })
 export default class Chapters extends Vue {}

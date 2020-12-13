@@ -18,13 +18,14 @@ import {
 library.add(faBookOpen, faCalendar, faPlus, faPaperPlane, faFileAlt);
 
 const instance = axios.create({
-  baseURL: 'http://localhost:3000/',
-  timeout: 10000
+  baseURL: "http://localhost:3000",
+  timeout: 1000
 });
 
+
 createApp(App)
-  .use(VueAxios, instance)
   .use(router)
   .use(store)
+  .use(VueAxios, instance)
   .component("font-awesome-icon", FontAwesomeIcon)
   .mount("#app");

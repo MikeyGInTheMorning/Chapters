@@ -9,11 +9,13 @@
         <input type="text" v-model="piece.Description" />
       </div>
     </div>
+    <button @click="saveEdit()">Save</button>
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import axios from "axios";
 
 @Options({
   props: {
@@ -23,6 +25,13 @@ import { Options, Vue } from "vue-class-component";
   methods: {
     closeEdit:function(){
       this.$emit('editClosed')
+    },
+    saveEdit: function(){
+      axios
+      .post('http://localhost:3000/chapters/save', {id: this.Chapter._id, Title: this.Chapter.Title, Description: this.Chapter.Description})
+      .then((response:any) => (
+          console.log(response)
+        ))
     }
   },
   computed: {
