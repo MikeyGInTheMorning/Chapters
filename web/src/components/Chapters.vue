@@ -9,10 +9,10 @@
           v-model="search"
         />
       </div>
-      <div class="chapter-nodes" @click="chapterClicked(null)">
+      <div class="chapter-nodes" @click="clearSelectedChapter()">
         <div v-for="chapter in chapters" :key="chapter.id">
           <ChapterNode
-            @click="chapterClicked(chapter)"
+            @click.stop="chapterClicked(chapter)"
             :Chapter="chapter"
             :isSelected="chapter === selectedChapter"
           ></ChapterNode>
@@ -28,8 +28,8 @@
       />
     </div>
     <ChapterEdit
-      :Chapter="selectedChapter"
-      @editClosed="chapterClicked(null) && getChapters()"
+      :Chapter="selectedChapterDoubleClick"
+      @editClosed="clearSelectedChapter() && getChapters()"
     ></ChapterEdit>
   </div>
 </template>
@@ -56,7 +56,7 @@ import { Chapter } from "../models/Chapter";
   },
   methods: {
     addChapter: function() {
-      this.selectedChapter = new Chapter();
+      this.selectedChapterDoubleClick = new Chapter();
     },
     deleteChapter: function() {
       console.log(this.selectedChapter);
@@ -74,8 +74,8 @@ import { Chapter } from "../models/Chapter";
         }, 250);
       } else {
         clearTimeout(this.timer);
-        this.selectedChapterDoubleClick = event;
-        this.$emit("chapterSelected", event);
+        this.selectedChapterDoubleClick = this.selectedChapter;
+        this.$emit("chapterSelected", this.selectedChapter);
         this.clickCounter = 0;
       }
     },
@@ -84,6 +84,11 @@ import { Chapter } from "../models/Chapter";
         .get("http://localhost:3000/chapters")
         .then((response: any) => (this.chapters = response.data.chapters));
     },
+    clearSelectedChapter: function(){
+      this.selectedChapter = null
+      this.selectedChapterDoubleClick = null
+      this.clickCounter = 0
+    }
   }, 
   mounted: function() {
     this.getChapters()
@@ -145,7 +150,7 @@ $grid-template-radius: 15rem;
 .node {
 }
 
-$action-distance: 7rem;
+$action-distance: 5vw;
 .action {
   position: absolute;
   bottom: $action-distance;
