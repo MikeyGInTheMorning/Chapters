@@ -28,7 +28,7 @@ import axios from "axios";
     },
     saveEdit: function(){
       axios
-      .post('http://localhost:3000/chapters/save', {id: this.Chapter._id, Title: this.Chapter.Title, Description: this.Chapter.Description})
+      .post('http://localhost:3000/chapters/save', this.Chapter)
       .then((response:any) => (
           console.log(response)
         ))

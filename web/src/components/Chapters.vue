@@ -10,7 +10,7 @@
         />
       </div>
       <div class="chapter-nodes" @click="chapterClicked(null)">
-        <div v-for="chapter in chapterz" :key="chapter.id">
+        <div v-for="chapter in chapters" :key="chapter.id">
           <ChapterNode
             @click="chapterClicked(chapter)"
             :Chapter="chapter"
@@ -19,10 +19,18 @@
         </div>
       </div>
     </div>
-    <div class="action" @click="addChapter()">
-      <font-awesome-icon icon="plus" />
+    <div class="action">
+      <font-awesome-icon icon="plus" @click="addChapter()" />
+      <font-awesome-icon
+        class="action__delete"
+        @click="deleteChapter()"
+        icon="plus"
+      />
     </div>
-  <ChapterEdit :Chapter="selectedChapter" @editClosed="chapterClicked(null)"></ChapterEdit>
+    <ChapterEdit
+      :Chapter="selectedChapter"
+      @editClosed="chapterClicked(null) && getChapters()"
+    ></ChapterEdit>
   </div>
 </template>
 
@@ -31,6 +39,7 @@ import { Options, Vue } from "vue-class-component";
 import axios from "axios";
 import ChapterNode from "@/components/ChapterNode.vue";
 import ChapterEdit from "@/components/ChapterEdit.vue";
+import { Chapter } from "../models/Chapter";
 
 @Options({
   components: { ChapterNode, ChapterEdit },
@@ -40,87 +49,45 @@ import ChapterEdit from "@/components/ChapterEdit.vue";
       search: "",
       selectedChapter: null,
       selectedChapterDoubleClick: null,
-      chapters: [
-        // {
-        //   id: 1,
-        //   Title: "Physical Health",
-        //   Description: "Everyting to do for physical health"
-        // },
-        // {
-        //   id: 2,
-        //   Title: "Personal Projects",
-        //   Description: ""
-        // },
-        // {
-        //   id: 3,
-        //   Title: "Spirituality",
-        //   Description: ""
-        // },
-        // {
-        //   id: 1,
-        //   Title: "Physical Health",
-        //   Description: "Everyting to do for physical health"
-        // },
-        // {
-        //   id: 2,
-        //   Title: "Personal Projects",
-        //   Description: ""
-        // },
-        // {
-        //   id: 3,
-        //   Title: "Spirituality",
-        //   Description: ""
-        // }
-      ],
+      chapters: [],
       clickCounter: 0,
-      timer: null
+      timer: null,
     };
   },
   methods: {
     addChapter: function() {
-      this.chapters.push({
-        id: this.chapters.length + 1,
-        Title: "Test",
-        Description: "Hello World"
-      });
+      this.selectedChapter = new Chapter();
+    },
+    deleteChapter: function() {
+      console.log(this.selectedChapter);
+      axios
+        .post("http://localhost:3000/chapters/remove", this.selectedChapter)
+        .then((response: any) => (this.chapters = response.data.chapters));
     },
     chapterClicked: function(event: any) {
-      this.clickCounter++
+      this.clickCounter++;
       if (this.clickCounter == 1) {
-        this.selectedChapter = event
-        this.selectedChapterDoubleClick = null
+        this.selectedChapter = event;
+        this.selectedChapterDoubleClick = null;
         this.timer = setTimeout(() => {
           this.clickCounter = 0;
         }, 250);
       } else {
         clearTimeout(this.timer);
-        this.selectedChapterDoubleClick = event
-        console.log('here')
-        this.$emit("chapterSelected", event)
-        this.clickCounter = 0
+        this.selectedChapterDoubleClick = event;
+        this.$emit("chapterSelected", event);
+        this.clickCounter = 0;
       }
-    }
-  },
-  computed: {
-    chapterz: function() {
-      const arr = [...this.chapters]
-      // let id = this.chapters.length
-      // for (let index = 0; index < 25; index++) {
-      //   const curr = { ...this.chapters[index]}
-      //   id++
-      //   curr.id = id
-      //   arr.push(curr)
-      // }
-      return arr;
-    }
-  },
+    },
+    getChapters: function() {
+      axios
+        .get("http://localhost:3000/chapters")
+        .then((response: any) => (this.chapters = response.data.chapters));
+    },
+  }, 
   mounted: function() {
-    axios
-      .get('http://localhost:3000/chapters')
-      .then((response:any) => (
-          this.chapters =response.data.chapters
-        ))
-  }
+    this.getChapters()
+  },
 })
 export default class Chapters extends Vue {}
 </script>
@@ -206,6 +173,10 @@ $action-distance: 7rem;
 
   &:active {
     box-shadow: 0px 0px $white;
+  }
+  &__delete {
+    right: 5rem;
+    background: red;
   }
 }
 

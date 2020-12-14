@@ -15,6 +15,7 @@ mongoose.set("useFindAndModify", false);
 
 //models
 const Chapter = require("./models/Chapter");
+const { json } = require("body-parser");
 
 // POST METHOD
 app.post("/", async (req, res) => {
@@ -36,13 +37,38 @@ app.get("/chapters", (req, res) => {
   });
 });
 
-app.post("/chapters/save", (req, res, next) => {
-  const id = req.body.id;
-  Chapter.findByIdAndUpdate(id, req.body, (err) => {
+app.post("/chapters/remove", (req, res) => {
+  const id = req.body._id;
+  console.log(req.body);
+  Chapter.findByIdAndRemove(id, (err) => {
     if (err) return res.send(500, err);
     res.redirect("/chapters");
   });
 });
+
+app.post("/chapters/save", (req, res, next) => {
+  const id = req.body._id;
+
+  if (id) {
+    // const chapter = new Chapter(req.body);
+    // chapter.save().then((err) => {
+    //   if (err) return res.send(500, err);
+    //   res.send(200, err);
+    // });
+    Chapter.findByIdAndUpdate(id, new Chapter(req.body), (err) => {
+      if (err) return res.send(500, err);
+      res.send(200, err);
+    });
+  } else {
+    const chap = new Chapter(req.body);
+    chap.save().then((chap, err) => {
+      if (err) return res.send(500, err);
+      res.send(200, err);
+    });
+  }
+});
+
+//DELETE
 
 //UPDATE
 app
@@ -60,15 +86,6 @@ app
       res.redirect("/");
     });
   });
-
-//DELETE
-app.route("/remove/:id").get((req, res) => {
-  const id = req.params.id;
-  Chapter.findByIdAndRemove(id, (err) => {
-    if (err) return res.send(500, err);
-    res.redirect("/");
-  });
-});
 
 mongoose.connect(
   process.env.DB_CONNECT,
