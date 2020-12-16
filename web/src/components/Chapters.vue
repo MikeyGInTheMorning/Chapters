@@ -27,11 +27,7 @@
         icon="plus"
       />
     </div>
-    <!-- <ChapterEdit
-      :Chapter="selectedChapterDoubleClick"
-      @editClosed="clearSelectedChapter() && getChapters()"
-    ></ChapterEdit> -->
-    <!-- <div class="slide-out" v-if="showSlideOut"> -->
+    <div class="slide-out" v-if="showSlideOut">
     <SlideOut :showSlideOut="showSlideOut" @closed="clearSelectedChapter()">
       <div class="slide-out-container" v-if="showSlideOut">
         <input
@@ -45,15 +41,9 @@
           v-model="selectedChapterDoubleClick.Description"
         />
         <button @click="saveEdit()">Save</button>
-        <div class="pieces">
-          <!-- <div v-for="piece in chap.Pieces" :key="piece.id" class="piece">
-            <input type="text" v-model="piece.Title" />
-            <input type="text" v-model="piece.Description" />
-          </div> -->
-        </div>
       </div>
     </SlideOut>
-    <!-- </div>     -->
+    </div>    
   </div>
 </template>
 
@@ -96,9 +86,11 @@ import SlideOut from "../components/SlideOut.vue";
         }, 250);
       } else {
         clearTimeout(this.timer);
-        this.selectedChapterDoubleClick = this.selectedChapter;
-        this.$emit("chapterSelected", this.selectedChapter);
+        // this.selectedChapterDoubleClick = this.selectedChapter;
+        // this.$emit("chapterSelected", this.selectedChapter);
         this.clickCounter = 0;
+        this.$router.push({ name: 'Chapter', params: { chapterId: this.selectedChapter._id}})
+        
       }
     },
     getChapters: function() {
@@ -114,7 +106,6 @@ import SlideOut from "../components/SlideOut.vue";
     saveEdit: function() {
       axios
         .post("http://localhost:3000/chapters/save", this.selectedChapterDoubleClick)
-        .then((response: any) => console.log(response));
     },
   },
   computed: {
@@ -188,52 +179,6 @@ $grid-template-radius: 15rem;
 
   overflow-y: auto;
 }
-
-// .slide-out {
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   right: 0;
-//   bottom: 0;
-
-//   background-color: transparent;
-// }
-
-// .opening {
-//   animation-name: onSlideOutOpen;
-//   animation-duration: 0.5s;
-// }
-
-// .closing {
-//   animation-name: onSlideOutClose;
-//   animation-duration: 0.5s;
-// }
-
-// @keyframes onSlideOutOpen {
-//   0% {
-//     width: 0%;
-//     visibility: 0;
-//     opacity: 0;
-//   }
-//   100% {
-//     width: 40%;
-//     visibility: 100%;
-//     opacity: 100%;
-//   }
-// }
-
-// @keyframes onSlideOutClose {
-//   0% {
-//     width: 40%;
-//     visibility: 100%;
-//     opacity: 100%;
-//   }
-//   100% {
-//     width: 0%;
-//     visibility: 0%;
-//     opacity: 0%;
-//   }
-// }
 
 $action-distance: 5vw;
 .action {

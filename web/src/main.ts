@@ -11,11 +11,25 @@ import {
   faCalendar,
   faFileAlt,
   faPaperPlane,
-  faPlus
+  faPlus,
+  faMoneyBillWave,
+  faList,
+  faStickyNote,
+  faSave
 } from "@fortawesome/free-solid-svg-icons";
 
 //https://fontawesome.com/icons?d=gallery&s=solid&m=free
-library.add(faBookOpen, faCalendar, faPlus, faPaperPlane, faFileAlt);
+library.add(
+  faBookOpen,
+  faCalendar,
+  faPlus,
+  faPaperPlane,
+  faFileAlt,
+  faMoneyBillWave,
+  faList,
+  faStickyNote,
+  faSave
+);
 
 const instance = axios.create({
   baseURL: "http://localhost:3000",

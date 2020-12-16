@@ -1,12 +1,16 @@
 <template>
   <div class="menu-bar">
     <div class="menu-bar__menu-items">
-      <div class="menu-bar__menu-item menu-color-1">
-        <font-awesome-icon icon="book-open" />
-      </div>
-      <div class="menu-bar__menu-item menu-color-2">
-        <font-awesome-icon icon="calendar" />
-      </div>
+      <router-link to="/" class="menu-bar__menu-item menu-color-1">
+        <div>
+          <font-awesome-icon icon="book-open" />
+        </div>
+      </router-link>
+      <router-link to="/chapter" class="menu-bar__menu-item menu-color-2">
+        <div>
+          <font-awesome-icon icon="calendar" />
+        </div>
+      </router-link>
       <div class="menu-bar__menu-item menu-color-3">
         <font-awesome-icon icon="file-alt" />
       </div>
@@ -22,8 +26,8 @@ import { Options, Vue } from "vue-class-component";
 
 @Options({
   props: {
-    msg: String
-  }
+    msg: String,
+  },
 })
 export default class HelloWorld extends Vue {
   msg!: string;
@@ -75,7 +79,13 @@ export default class HelloWorld extends Vue {
       font-size: $font-size-xxlarge;
     }
 
+    &:visited {
+      text-decoration: none;
+      color: $white;
+    }
+
     &:active {
+      color: $white;
       box-shadow: 0px 0px $white;
     }
   }

@@ -1,10 +1,9 @@
 <template>
   <div class="spa">
     <MenuBar></MenuBar>
-    <Chapters
-      v-if="!chapterSelected"
-      @chapterSelected="onChapterSelected()"
-    ></Chapters>
+
+    <router-view></router-view>
+    <!-- <Chapters></Chapters> -->
   </div>
 </template>
 
@@ -16,21 +15,16 @@ import MenuBar from "@/components/MenuBar.vue";
 @Options({
   components: { Chapters, MenuBar },
   data: function() {
-    return {
-      chapterSelected: null
-    };
+    return {};
   },
-  methods: {
-    onChapterSelected: function(event: any) {
-      this.chapterSelected = event;
-    }
-  }
+  methods: {},
 })
 export default class App extends Vue {}
 </script>
 
 <style lang="scss">
 @import "./src/styles/main.scss";
+@import "./src/styles/fonts.scss";
 
 * {
   margin: 0;
@@ -41,10 +35,11 @@ export default class App extends Vue {}
 html {
   box-sizing: border-box;
   font-size: 62.5%;
+  font-family: $font-family;
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
