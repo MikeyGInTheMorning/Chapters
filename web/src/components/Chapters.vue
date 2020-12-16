@@ -27,10 +27,33 @@
         icon="plus"
       />
     </div>
-    <ChapterEdit
+    <!-- <ChapterEdit
       :Chapter="selectedChapterDoubleClick"
       @editClosed="clearSelectedChapter() && getChapters()"
-    ></ChapterEdit>
+    ></ChapterEdit> -->
+    <!-- <div class="slide-out" v-if="showSlideOut"> -->
+    <SlideOut :showSlideOut="showSlideOut" @closed="clearSelectedChapter()">
+      <div class="slide-out-container" v-if="showSlideOut">
+        <input
+          type="text"
+          class="chapter-edit__title"
+          v-model="selectedChapterDoubleClick.Title"
+        />
+        <input
+          type="text"
+          class="chapter-edit__description"
+          v-model="selectedChapterDoubleClick.Description"
+        />
+        <button @click="saveEdit()">Save</button>
+        <div class="pieces">
+          <!-- <div v-for="piece in chap.Pieces" :key="piece.id" class="piece">
+            <input type="text" v-model="piece.Title" />
+            <input type="text" v-model="piece.Description" />
+          </div> -->
+        </div>
+      </div>
+    </SlideOut>
+    <!-- </div>     -->
   </div>
 </template>
 
@@ -38,12 +61,13 @@
 import { Options, Vue } from "vue-class-component";
 import axios from "axios";
 import ChapterNode from "@/components/ChapterNode.vue";
-import ChapterEdit from "@/components/ChapterEdit.vue";
+// import ChapterEdit from "@/components/ChapterEdit.vue";
 import Chapter from "../models/Chapter";
 import ChapterService from "../services/chapterService";
+import SlideOut from "../components/SlideOut.vue";
 
 @Options({
-  components: { ChapterNode, ChapterEdit },
+  components: { ChapterNode, SlideOut },
   emits: ["chapterSelected"],
   data: function() {
     return {
@@ -87,6 +111,11 @@ import ChapterService from "../services/chapterService";
       this.selectedChapterDoubleClick = null;
       this.clickCounter = 0;
     },
+    saveEdit: function() {
+      axios
+        .post("http://localhost:3000/chapters/save", this.selectedChapterDoubleClick)
+        .then((response: any) => console.log(response));
+    },
   },
   computed: {
     chaptersFiltered: function() {
@@ -94,8 +123,13 @@ import ChapterService from "../services/chapterService";
         ? this.chapters
         : this.chapters.filter(
             (c: Chapter) =>
-              c.Title.toLowerCase().indexOf(this.search.toLowerCase()) > -1 ||  c.Description.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+              c.Title.toLowerCase().indexOf(this.search.toLowerCase()) > -1 ||
+              c.Description.toLowerCase().indexOf(this.search.toLowerCase()) >
+                -1
           );
+    },
+    showSlideOut: function() {
+      return this.selectedChapterDoubleClick != null;
     },
   },
   mounted: function() {
@@ -155,8 +189,51 @@ $grid-template-radius: 15rem;
   overflow-y: auto;
 }
 
-.node {
-}
+// .slide-out {
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+
+//   background-color: transparent;
+// }
+
+// .opening {
+//   animation-name: onSlideOutOpen;
+//   animation-duration: 0.5s;
+// }
+
+// .closing {
+//   animation-name: onSlideOutClose;
+//   animation-duration: 0.5s;
+// }
+
+// @keyframes onSlideOutOpen {
+//   0% {
+//     width: 0%;
+//     visibility: 0;
+//     opacity: 0;
+//   }
+//   100% {
+//     width: 40%;
+//     visibility: 100%;
+//     opacity: 100%;
+//   }
+// }
+
+// @keyframes onSlideOutClose {
+//   0% {
+//     width: 40%;
+//     visibility: 100%;
+//     opacity: 100%;
+//   }
+//   100% {
+//     width: 0%;
+//     visibility: 0%;
+//     opacity: 0%;
+//   }
+// }
 
 $action-distance: 5vw;
 .action {
