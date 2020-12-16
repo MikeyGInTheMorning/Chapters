@@ -1,15 +1,25 @@
 <template>
   <div class="chapter-edit" :class="{ closed: Chapter == null }">
-    <button @click="closeEdit()">Close</button>
-    <input type="text" class="chapter-edit__title" v-model="chap.Title" />
-    <input type="text" class="chapter-edit__description" v-model="chap.Description"/>
-    <div class="pieces">
-      <div v-for="piece in chap.Pieces" :key="piece.id" class="piece">
-        <input type="text" v-model="piece.Title" />
-        <input type="text" v-model="piece.Description" />
+    <div class="panel--content">
+      <button class="closeBtn" @click="closeEdit()">
+        <font-awesome-icon icon="plus" />
+      </button>
+      <div class="panel--slot">
+        <input type="text" class="chapter-edit__title" v-model="chap.Title" />
+        <input
+          type="text"
+          class="chapter-edit__description"
+          v-model="chap.Description"
+        />
+        <div class="pieces">
+          <div v-for="piece in chap.Pieces" :key="piece.id" class="piece">
+            <input type="text" v-model="piece.Title" />
+            <input type="text" v-model="piece.Description" />
+          </div>
+        </div>
+        <button @click="saveEdit()">Save</button>
       </div>
     </div>
-    <button @click="saveEdit()">Save</button>
   </div>
 </template>
 
@@ -19,74 +29,89 @@ import axios from "axios";
 
 @Options({
   props: {
-    Chapter: Object    
+    Chapter: Object,
   },
-  emits: ['editClosed'],
+  emits: ["editClosed"],
   methods: {
-    closeEdit:function(){
-      this.$emit('editClosed')
+    closeEdit: function() {
+      this.$emit("editClosed");
     },
-    saveEdit: function(){
+    saveEdit: function() {
       axios
-      .post('http://localhost:3000/chapters/save', this.Chapter)
-      .then((response:any) => (
-          console.log(response)
-        ))
-    }
+        .post("http://localhost:3000/chapters/save", this.Chapter)
+        .then((response: any) => console.log(response));
+    },
   },
   computed: {
-    chap: function(){
-      return this.Chapter ? this.Chapter : {Title: '', Description: '', Pieces: []}
-    }
-  }
+    chap: function() {
+      return this.Chapter
+        ? this.Chapter
+        : { Title: "", Description: "", Pieces: [] };
+    },
+  },
 })
 export default class HelloWorld extends Vue {}
 </script>
 
 <style scoped lang="scss">
 @import "./src/styles/main.scss";
-.closed{
+.closed {
   height: 0px;
   width: 0px;
   overflow: hidden;
 }
+
 .chapter-edit {
   position: absolute;
-  top: 0;
+  top: 25%;
   right: 0;
-  bottom: 0;
-  min-width: 50rem;
+  bottom: 25%;
+  min-width: 25rem;
   background: white;
+  border-top-left-radius: 50rem;
+  border-bottom-left-radius: 50rem;
 
-  border-right: 1rem solid $node-main;
+  border-left: 1rem solid $node-main;
+}
+
+.panel--content {
+  padding: 4rem 2rem 4rem 5rem;
 
   display: flex;
   flex-direction: column;
-  justify-content: start;
   align-items: center;
-
-  &__title {
-    min-width: 15rem;
-  }
-
-  &__description {
-    min-width: 10rem;
-  }
 }
 
-.pieces {
+.panel--slot {
+  flex-grow: 2;
+
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: center;
   align-items: center;
 }
 
-.piece {
-  border-bottom: .5rem solid $node-main;
-  display: flex;
+.closeBtn {
+  align-self: flex-end;
+  transform: rotate(45deg);
+  border: none;
+  outline:none;
+  background: none;
 
-  &:last-child{
-    border-bottom: none;
+  font-size: $font-size-xxlarge;
+  color: $dark-grey;
+
+  &:hover{
+    cursor: pointer;
+  }
+}
+
+@keyframes fadein {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
   }
 }
 </style>

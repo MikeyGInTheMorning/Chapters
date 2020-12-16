@@ -10,7 +10,7 @@
         />
       </div>
       <div class="chapter-nodes" @click="clearSelectedChapter()">
-        <div v-for="chapter in chapters" :key="chapter.id">
+        <div v-for="chapter in chaptersFiltered" :key="chapter.id">
           <ChapterNode
             @click.stop="chapterClicked(chapter)"
             :Chapter="chapter"
@@ -39,7 +39,8 @@ import { Options, Vue } from "vue-class-component";
 import axios from "axios";
 import ChapterNode from "@/components/ChapterNode.vue";
 import ChapterEdit from "@/components/ChapterEdit.vue";
-import { Chapter } from "../models/Chapter";
+import Chapter from "../models/Chapter";
+import ChapterService from "../services/chapterService";
 
 @Options({
   components: { ChapterNode, ChapterEdit },
@@ -49,7 +50,7 @@ import { Chapter } from "../models/Chapter";
       search: "",
       selectedChapter: null,
       selectedChapterDoubleClick: null,
-      chapters: [],
+      chapters: [] as Chapter[],
       clickCounter: 0,
       timer: null,
     };
@@ -59,10 +60,7 @@ import { Chapter } from "../models/Chapter";
       this.selectedChapterDoubleClick = new Chapter();
     },
     deleteChapter: function() {
-      console.log(this.selectedChapter);
-      axios
-        .post("http://localhost:3000/chapters/remove", this.selectedChapter)
-        .then((response: any) => (this.chapters = response.data.chapters));
+      ChapterService.delete(this.selectedChapter, () => this.getChapters());
     },
     chapterClicked: function(event: any) {
       this.clickCounter++;
@@ -80,18 +78,28 @@ import { Chapter } from "../models/Chapter";
       }
     },
     getChapters: function() {
-      axios
-        .get("http://localhost:3000/chapters")
-        .then((response: any) => (this.chapters = response.data.chapters));
+      ChapterService.getAll(
+        (response: Chapter[]) => (this.chapters = response)
+      );
     },
-    clearSelectedChapter: function(){
-      this.selectedChapter = null
-      this.selectedChapterDoubleClick = null
-      this.clickCounter = 0
-    }
-  }, 
+    clearSelectedChapter: function() {
+      this.selectedChapter = null;
+      this.selectedChapterDoubleClick = null;
+      this.clickCounter = 0;
+    },
+  },
+  computed: {
+    chaptersFiltered: function() {
+      return !this.search || (this.search && this.search == "")
+        ? this.chapters
+        : this.chapters.filter(
+            (c: Chapter) =>
+              c.Title.toLowerCase().indexOf(this.search.toLowerCase()) > -1 ||  c.Description.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+          );
+    },
+  },
   mounted: function() {
-    this.getChapters()
+    this.getChapters();
   },
 })
 export default class Chapters extends Vue {}
