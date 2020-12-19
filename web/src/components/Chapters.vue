@@ -28,22 +28,22 @@
       />
     </div>
     <div class="slide-out" v-if="showSlideOut">
-    <SlideOut :showSlideOut="showSlideOut" @closed="clearSelectedChapter()">
-      <div class="slide-out-container" v-if="showSlideOut">
-        <input
-          type="text"
-          class="chapter-edit__title"
-          v-model="selectedChapterDoubleClick.Title"
-        />
-        <input
-          type="text"
-          class="chapter-edit__description"
-          v-model="selectedChapterDoubleClick.Description"
-        />
-        <button @click="saveEdit()">Save</button>
-      </div>
-    </SlideOut>
-    </div>    
+      <SlideOut :showSlideOut="showSlideOut" @closed="clearSelectedChapter()">
+        <div class="slide-out-container" v-if="showSlideOut">
+          <input
+            type="text"
+            class="chapter-edit__title"
+            v-model="selectedChapterDoubleClick.Title"
+          />
+          <input
+            type="text"
+            class="chapter-edit__description"
+            v-model="selectedChapterDoubleClick.Description"
+          />
+          <button @click="saveEdit()">Save</button>
+        </div>
+      </SlideOut>
+    </div>
   </div>
 </template>
 
@@ -53,7 +53,7 @@ import axios from "axios";
 import ChapterNode from "@/components/ChapterNode.vue";
 // import ChapterEdit from "@/components/ChapterEdit.vue";
 import Chapter from "../models/Chapter";
-import ChapterService from "../services/chapterService";
+import DataService from "../services/dataService";
 import SlideOut from "../components/SlideOut.vue";
 
 @Options({
@@ -74,7 +74,9 @@ import SlideOut from "../components/SlideOut.vue";
       this.selectedChapterDoubleClick = new Chapter();
     },
     deleteChapter: function() {
-      ChapterService.delete(this.selectedChapter, () => this.getChapters());
+      DataService.Chapters.delete(this.selectedChapter, () =>
+        this.getChapters()
+      );
     },
     chapterClicked: function(event: any) {
       this.clickCounter++;
@@ -86,15 +88,15 @@ import SlideOut from "../components/SlideOut.vue";
         }, 250);
       } else {
         clearTimeout(this.timer);
-        // this.selectedChapterDoubleClick = this.selectedChapter;
-        // this.$emit("chapterSelected", this.selectedChapter);
         this.clickCounter = 0;
-        this.$router.push({ name: 'Chapter', params: { chapterId: this.selectedChapter._id}})
-        
+        this.$router.push({
+          name: "Chapter",
+          params: { chapterId: this.selectedChapter._id },
+        });
       }
     },
     getChapters: function() {
-      ChapterService.getAll(
+      DataService.Chapters.getAll(
         (response: Chapter[]) => (this.chapters = response)
       );
     },
@@ -104,8 +106,9 @@ import SlideOut from "../components/SlideOut.vue";
       this.clickCounter = 0;
     },
     saveEdit: function() {
-      axios
-        .post("http://localhost:3000/chapters/save", this.selectedChapterDoubleClick)
+      DataService.Chapters.save(this.selectedChapterDoubleClick, () => {
+        this.getChapters();
+      });
     },
   },
   computed: {

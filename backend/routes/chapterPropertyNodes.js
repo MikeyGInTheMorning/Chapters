@@ -22,7 +22,7 @@ router.get("/parent/:id", (req, res, next) => {
   ChapterPropertyNode.find({ Parent: req.params.id }, (err, chaps) => {
     if (err) return res.send(500, err);
     res.send({
-      chapterPropertyNode: chaps && chaps.length > 0 ? chaps : [],
+      chapterPropertyNodes: chaps && chaps.length > 0 ? chaps : [],
     });
   });
 });
@@ -55,6 +55,25 @@ router.post("/save", (req, res, next) => {
       res.status(200).send(changed);
     });
   }
+});
+
+router.post("/saveAll", (req, res, next) => {
+  const chapterPropertyNodes = req.body;
+  // const chapterPropertyNodes = nodes.map(
+  //   (node) => new ChapterPropertyNode(node)
+  // );
+  ChapterPropertyNode.bulkWrite(
+    chapterPropertyNodes.map((node) => ({
+      updateOne: {
+        filter: { _id: node._id },
+        update: { $set: node },
+        upsert: true,
+      },
+    }))
+  ).then((err) => {
+    if (!err.isOk()) return res.send(500, err);
+    res.status(200).send(err);
+  });
 });
 
 module.exports = router;

@@ -29,6 +29,9 @@
            <div class="action-bar__button" @click="saveEdit()">
             <font-awesome-icon icon="save" />
           </div>
+           <div class="action-bar__button" @click="addProperty()">
+            <font-awesome-icon icon="plus" />
+          </div>
           <div class="action-bar__button" @click="propertyClicked('')">
             <font-awesome-icon icon="plus" />
           </div>
@@ -42,7 +45,7 @@
           v-if="propertySelected == 'pieces'"
           class="property-selected pieces-selected"
         >
-          Pieces
+          <Pieces :parentId="chapterId"></Pieces>
         </div>
         <div
           v-else-if="propertySelected == 'budget'"
@@ -52,6 +55,7 @@
         </div>
         <div v-else-if="propertySelected == 'notes'" class="property-selected">
           Notes
+
         </div>
       </div>
     </div>
@@ -62,13 +66,13 @@
 import { Options, Vue } from "vue-class-component";
 import axios from "axios";
 import ChapterNode from "@/components/ChapterNode.vue";
-// import ChapterEdit from "@/components/ChapterEdit.vue";
+import Pieces from "@/components/Pieces.vue";
 import Chapter from "../models/Chapter";
-import ChapterService from "../services/chapterService";
+import DataService from "../services/dataService";
 import SlideOut from "../components/SlideOut.vue";
 
 @Options({
-  components: { ChapterNode, SlideOut },
+  components: { ChapterNode, SlideOut, Pieces },
   props: ["chapterId"],
   data: function() {
     return {
@@ -77,30 +81,18 @@ import SlideOut from "../components/SlideOut.vue";
     };
   },
   methods: {
-    propertyClicked: function(data) {
+    propertyClicked: function(data:string) {
       this.propertySelected = data;
     },
-    deleteChapter: function() {
-      ChapterService.delete(this.selectedChapter, () => this.getChapters());
+    removeProperty: function() {
+      DataService.ChapterPropertyNodes.delete(this.selectedChapter, () => this.getChapters());
     },
-    chapterClicked: function(event: any) {
-      this.clickCounter++;
-      if (this.clickCounter == 1) {
-        this.selectedChapter = event;
-        this.selectedChapterDoubleClick = null;
-        this.timer = setTimeout(() => {
-          this.clickCounter = 0;
-        }, 250);
-      } else {
-        clearTimeout(this.timer);
-        this.selectedChapterDoubleClick = this.selectedChapter;
-        this.$emit("chapterSelected", this.selectedChapter);
-        this.clickCounter = 0;
-      }
+    addProperty: function() {
+      //DataService.ChapterPropertyNodes.save(this.selectedChapter, () => this.getChapters());
     },
     initializeChapter: function() {
       if (this.chapterId) {
-        ChapterService.getOne(
+        DataService.Chapters.getOne(
           this.chapterId,
           (response: Chapter) => (this.chapter = response)
         );
@@ -108,13 +100,8 @@ import SlideOut from "../components/SlideOut.vue";
         this.chapter = new Chapter();
       }
     },
-    clearSelectedChapter: function() {
-      this.selectedChapter = null;
-      this.selectedChapterDoubleClick = null;
-      this.clickCounter = 0;
-    },
     saveEdit: function() {
-      ChapterService.save(
+      DataService.Chapters.save(
         this.chapter,
         (response: Chapter) => (this.chapter = response)
       );
@@ -273,7 +260,7 @@ export default class Chapters extends Vue {}
 
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 10fr;
+  grid-template-rows: 3rem 1fr;
 
   &__label {
     display: flex;
@@ -285,9 +272,6 @@ export default class Chapters extends Vue {}
 }
 
 .pieces-selected {
-  background: red;
-}
-.budget-selected {
-  background: blue;
+  border: red solid;
 }
 </style>
