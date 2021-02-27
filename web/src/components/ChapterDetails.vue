@@ -26,10 +26,10 @@
           </div>
         </div>
         <div class="action-bar">
-           <div class="action-bar__button" @click="saveEdit()">
+          <div class="action-bar__button" @click="saveEdit()">
             <font-awesome-icon icon="save" />
           </div>
-           <div class="action-bar__button" @click="addProperty()">
+          <div class="action-bar__button" @click="addProperty()">
             <font-awesome-icon icon="plus" />
           </div>
           <div class="action-bar__button" @click="propertyClicked('')">
@@ -55,7 +55,6 @@
         </div>
         <div v-else-if="propertySelected == 'notes'" class="property-selected">
           Notes
-
         </div>
       </div>
     </div>
@@ -70,6 +69,7 @@ import Pieces from "@/components/Pieces.vue";
 import Chapter from "../models/Chapter";
 import DataService from "../services/dataService";
 import SlideOut from "../components/SlideOut.vue";
+import SaveEventHub from "../events/saveEvent"
 
 @Options({
   components: { ChapterNode, SlideOut, Pieces },
@@ -81,11 +81,13 @@ import SlideOut from "../components/SlideOut.vue";
     };
   },
   methods: {
-    propertyClicked: function(data:string) {
+    propertyClicked: function(data: string) {
       this.propertySelected = data;
     },
     removeProperty: function() {
-      DataService.ChapterPropertyNodes.delete(this.selectedChapter, () => this.getChapters());
+      DataService.ChapterPropertyNodes.delete(this.selectedChapter, () =>
+        this.getChapters()
+      );
     },
     addProperty: function() {
       //DataService.ChapterPropertyNodes.save(this.selectedChapter, () => this.getChapters());
@@ -101,10 +103,10 @@ import SlideOut from "../components/SlideOut.vue";
       }
     },
     saveEdit: function() {
-      DataService.Chapters.save(
-        this.chapter,
-        (response: Chapter) => (this.chapter = response)
-      );
+      DataService.Chapters.save(this.chapter, (response: Chapter) => {
+        this.chapter = response;
+        SaveEventHub.$emit('save');
+      });
     },
   },
   computed: {},
@@ -173,12 +175,12 @@ export default class Chapters extends Vue {}
   }
 }
 
-.button-bar{
-    width: 100%;
-    padding: 2rem 0rem;
+.button-bar {
+  width: 100%;
+  padding: 2rem 0rem;
 
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .property-bar {

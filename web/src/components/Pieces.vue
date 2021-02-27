@@ -19,35 +19,12 @@
         <div class="piece-list__header-row">
           Actions
         </div>
-         <div class="piece-list__row-cell">
-            1
-          </div>
-           <div class="piece-list__row-cell">
-            1
-          </div>
-           <div class="piece-list__row-cell">
-            1
-          </div>
-           <div class="piece-list__row-cell">
-            2
-          </div>
-           <div class="piece-list__row-cell">
-            2
-          </div>
-           <div class="piece-list__row-cell">
-            2
-          </div>
-        <div v-for="piece in pieces" :key="piece._id">
-          <div class="piece-list__row-cell">
-            MOVE
-          </div>
-          <div class="piece-list__row-cell">
-            {{ piece.Title }}
-          </div>
-           <div class="piece-list__row-cell">
-            ACTIONS
-          </div>
-        </div>
+        <PieceRow
+          v-for="piece in pieces"
+          :key="piece._id"
+          :piece="piece"
+          class="piece-list__row"
+        ></PieceRow>
       </div>
     </div>
   </div>
@@ -60,10 +37,12 @@ import ChapterNode from "@/components/ChapterNode.vue";
 import SlideOut from "../components/SlideOut.vue";
 import DataService from "../services/dataService";
 import ChapterPropertyNode from "src/models/ChapterPropertyNode";
+import PieceRow from "../components/PieceRow.vue";
+import SaveEventHub from "../events/saveEvent"
 
 @Options({
   props: ["parentId"],
-  components: {},
+  components: { PieceRow },
   data: function() {
     return {
       search: "",
@@ -84,10 +63,17 @@ import ChapterPropertyNode from "src/models/ChapterPropertyNode";
         }
       );
     },
+    savePieces: function() {
+      DataService.ChapterPropertyNodes.getAllByParent(
+        this.parentId,
+        (res: any) => this.getPieces()
+      );
+    },
   },
   computed: {},
-  mounted: function() {
-    this.getPieces();
+  created: function() {
+    // const hub:any = SaveEventHub;
+    // hub.$on('save', this.savePieces());
   },
 })
 export default class Chapters extends Vue {}
@@ -135,9 +121,9 @@ export default class Chapters extends Vue {}
 
   display: grid;
   grid-template-columns: 10rem 10fr 2fr;
-  grid-template-rows: 5rem;
-  grid-auto-rows: 2rem;
+  grid-auto-rows: minmax(auto, 4rem);
   grid-auto-flow: row;
+  align-items: center;
 
   &__header-row {
     height: 4rem;
@@ -152,13 +138,9 @@ export default class Chapters extends Vue {}
     align-items: center;
   }
 
-  &__row-cell {
-    height: 1fr;
-    width: 1fr;
-    padding: 1rem;
-    // display: flex;
-    // justify-content: start;
-    // align-items: center;
+  &__row {
+    height: 1rem;
+    grid-column: 1/-1;
   }
 }
 
