@@ -2,7 +2,6 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Chapters from "@/components/Chapters.vue";
 import ChapterDetails from "@/components/ChapterDetails.vue"
 
-
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -18,7 +17,7 @@ const routes: Array<RouteRecordRaw> = [
     // which is lazy-loaded when the route is visited.
     component: ChapterDetails,
     props: true,
-  },
+  }
 ];
 
 const router = createRouter({
@@ -27,3 +26,4 @@ const router = createRouter({
 });
 
 export default router;
+

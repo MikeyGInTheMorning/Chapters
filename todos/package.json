@@ -1,20 +1,18 @@
 {
-  "name": "chapters",
+  "name": "todos",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build && copy web.config dist",
+    "copy": "copy web.config dist",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.32",
-    "@fortawesome/free-solid-svg-icons": "^5.15.1",
-    "@fortawesome/vue-fontawesome": "^3.0.0-2",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "vue": "^3.0.0",
-    "vue-axios": "^3.2.0",
+    "vue-axios": "^3.2.4",
     "vue-class-component": "^8.0.0-0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
@@ -24,7 +22,7 @@
     "@typescript-eslint/parser": "^2.33.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-router": "^4.5.9",
+    "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
@@ -34,8 +32,8 @@
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-vue": "^7.0.0-0",
+    "node-sass": "^4.12.0",
     "prettier": "^1.19.1",
-    "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
     "typescript": "~3.9.3"
   }
