@@ -15,6 +15,14 @@
           <input type="text" class="todoItem--label" v-model="item.Label" />
         </div>
       </div>
+       <div class="journalEntries" v-for="entry in todo.JournalEntries" :key="entry._id">
+        <div class="entryType">
+          <input type="text" v-model="entry.EntryType">
+        </div>
+        <div class="entryText">
+          <input type="text" v-model="entry.Text">
+        </div>
+      </div>
     </div>
     <button v-on:click="saveData()">Save</button>
   </div>

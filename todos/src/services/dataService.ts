@@ -25,6 +25,14 @@ const DataService = {
         })
         .then((response: any) => callback(response.data.todo));
     },
+    findByDates: (startdate: ToDoDate, endDate: ToDoDate, callback: Function) => {
+      axios
+        .post("/todos/findByDates/", {
+          startDate: startdate,
+          endDate: endDate
+        })
+        .then((response: any) => callback(response.data.todos));
+    },
     save: (chapter: string, callback: Function) => {
       axios
         .post("/todos/save", chapter)

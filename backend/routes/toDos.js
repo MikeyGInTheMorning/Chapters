@@ -4,6 +4,7 @@ const router = express.Router();
 const Todo = require("../models/Todo");
 const TodoItem = require("../models/ToDoItem");
 const ToDoDate = require("../models/ToDoDate");
+const JournalEntry = require("../models/JournalEntry");
 
 router.get("/", (req, res, next) => {
   const time = new Date()
@@ -47,16 +48,53 @@ router.post("/findByDate", (req, res, next) => {
         for (let index = 0; index < 5; index++) {
           t.ToDoItem.push(new TodoItem())
         }
+        t.JournalEntries.push(new JournalEntry())
+        
         t.Date = toToDoDate(date)
         t._id = undefined
         res.send({ todo: t })
       }
-      
+
     });
   }
   else {
     res.send({
       todo: {},
+    });
+  }
+});
+
+router.post("/findByDates", (req, res, next) => {
+  const startDate = req.body.startDate;
+  const endDate = req.body.endDate;
+  if (startDate && endDate) {
+
+    Todo.find(
+      {
+        $and: [
+          { $and: [{ "Date.Day": { "$gte": startDate.Day } }, { "Date.Day": { "$lte": endDate.Day } }] },
+          { $and: [{ "Date.Month": { "$gte": startDate.Month } }, { "Date.Month": { "$lte": endDate.Month } }] },
+          { $and: [{ "Date.Year": { "$gte": startDate.Year } }, { "Date.Year": { "$lte": endDate.Year } }] }
+        ]
+      },
+      (err, todos) => {
+        if (err) return res.send(500, err);
+
+        if (todos) {
+          res.send({
+            todos: todos,
+          });
+        } else {
+          res.send({
+            todos: [{}],
+          });
+        }
+
+      });
+  }
+  else {
+    res.send({
+      todos: [{}],
     });
   }
 });
@@ -73,7 +111,7 @@ router.post("/remove", (req, res) => {
 router.post("/save", (req, res, next) => {
   const id = req.body._id;
 
-  Todo.findOne({_id: id}, (err, todo) => {
+  Todo.findOne({ _id: id }, (err, todo) => {
     if (err) return res.send(500, err);
 
     const body = new Todo(req.body);
@@ -95,7 +133,7 @@ router.post("/save", (req, res, next) => {
         res.status(200).send(changed);
       });
     }
-    
+
   });
 });
 
